@@ -35,6 +35,21 @@ async def make_request(url: str) -> dict[str, any] | None:
         except Exception as e:
             return {"Error": str(e)}
 
+@mcp.tool()
+async def get_company_facts(ticker: str) -> str:
+    """Get company facts."""
+    url = (
+            f'https://api.financialdatasets.ai/company/facts/'
+            f'?ticker={ticker}'
+        )
+    data = await make_request(url)
+
+    # Check if data is found
+    if not data:
+        return "Unable to fetch company facts or no company facts found."
+
+    # Stringify the company facts
+    return json.dumps(data, indent=2)
 
 @mcp.tool()
 async def get_income_statements(ticker: str) -> str:
